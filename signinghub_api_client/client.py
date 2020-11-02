@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from requests_toolbelt.sessions import BaseUrlSession
 from .exceptions import SigningHubException, AuthenticationException, UnauthenticatedException
 
@@ -13,7 +13,7 @@ class SigningHubSession(BaseUrlSession):
 
     @property
     def token_expired(self):
-        return datetime() > (self.last_successful_auth_time + self.access_token_expiry_time)
+        return datetime.now(timezone.utc) > (self.last_successful_auth_time + self.access_token_expiry_time)
 
     @property
     def access_token(self):
@@ -73,7 +73,7 @@ class SigningHubSession(BaseUrlSession):
     def __process_authentication_response(self, response):
         self.refresh_token = None
         if response.status_code == 200:
-            self.last_successful_auth_time = datetime()
+            self.last_successful_auth_time = datetime.now(timezone.utc)
             data = response.json()
             self.access_token = data["access_token"]
             self.access_token_expiry_time = timedelta(seconds=data["expires_in"])

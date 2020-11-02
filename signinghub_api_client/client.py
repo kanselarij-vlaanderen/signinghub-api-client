@@ -15,6 +15,14 @@ class SigningHubSession(BaseUrlSession):
     def token_expired(self):
         return datetime() > (self.last_successful_auth_time + self.access_token_expiry_time)
 
+    @property
+    def access_token(self):
+        return self.headers["Authorization"].replace("Bearer ", "")
+
+    @access_token.setter
+    def access_token_setter(self, token):
+        self.headers["Authorization"] = "Bearer {}".format(token)
+
     def request(self, method, url, *args, **kwargs):
         response = super().request(method, url, *args, **kwargs)
         if response.status_code == 200:
@@ -67,7 +75,7 @@ class SigningHubSession(BaseUrlSession):
         if response.status_code == 200:
             self.last_successful_auth_time = datetime()
             data = response.json()
-            self.headers["Authorization"] = "Bearer {}".format(data["access_token"])
+            self.access_token = data["access_token"]
             self.access_token_expiry_time = timedelta(seconds=data["expires_in"])
             self.refresh_token = data["refresh_token"]
         else:
@@ -81,7 +89,7 @@ class SigningHubSession(BaseUrlSession):
         self.last_successful_auth_time = None
         self.access_token_expiry_time = None
         self.refresh_token = None
-        del self.headers["Authorization"]
+        del self.headers["Authorization"] # TODO: Handle trough setter? Is setting to empty string the same thing?
         return data
 
     ############################################################################

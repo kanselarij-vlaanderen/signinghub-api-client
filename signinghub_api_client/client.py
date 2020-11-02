@@ -9,7 +9,7 @@ class SigningHubSession(BaseUrlSession):
         self.access_token_expiry_time = None
         self.refresh_token = None
         super().__init__(base_url)
-        self.header["Accept-Type"] = "application/json"
+        self.headers["Accept-Type"] = "application/json"
 
     @property
     def token_expired(self):
@@ -117,7 +117,7 @@ class SigningHubSession(BaseUrlSession):
         """
         url = "packages/{package_id}/documents/{document_id}".format(
             package_id=package_id, document_id=document_id)
-        self.header["Accept-Type"] = "application/octet-stream"
+        self.headers["Accept-Type"] = "application/octet-stream"
         return self.get(url)
 
     def add_signature_field(self, package_id, document_id, data):
@@ -136,7 +136,7 @@ class SigningHubSession(BaseUrlSession):
             package_id=package_id, document_id=document_id)
         if page_no is not None:
             url = url + "/{page_no:d}".format(page_no=page_no)
-        self.header["Content-Type"] = "application/json" # No content, but API doc specifies this
+        self.headers["Content-Type"] = "application/json" # No content, but API doc specifies this
         return self.get(url)
 
     ############################################################################
@@ -162,5 +162,5 @@ class SigningHubSession(BaseUrlSession):
         https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1025
         """
         url = "packages/{package_id}/workflow".format(package_id=package_id)
-        self.header["Content-Type"] = "application/json" # No content, but API doc specifies this
+        self.headers["Content-Type"] = "application/json" # No content, but API doc specifies this
         return self.post(url)

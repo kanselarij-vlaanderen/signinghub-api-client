@@ -179,3 +179,14 @@ class SigningHubSession(BaseUrlSession):
         url = "packages/{package_id}/workflow".format(package_id=package_id)
         self.headers["Content-Type"] = "application/json" # No content, but API doc specifies this
         return self.post(url)
+
+    def get_integration_link(self, package_id, data):
+        """
+        No real documentation page is available for this call.
+        "Step 12 - Generate Integration URL for Encrypted Data (Coding)" of the following page has some useful info.
+        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1004
+        """
+        url = "links/integration"
+        data["package_id"] = package_id
+        return self.post(url, json=data) # TODO: if API returns response with wrong content-type, this will fail.
+

@@ -33,9 +33,9 @@ class SigningHubSession(BaseUrlSession):
     def request(self, method, url, *args, **kwargs):
         response = super().request(method, url, *args, **kwargs)
         if response.status_code == 200:
-            if response["Accept-Type"] == "application/json":
+            if response.headers["Content-Type"] == "application/json":
                 return response.json()
-            if response["Accept-Type"] == "application/octet-stream":
+            if response.headers["Content-Type"] == "application/octet-stream":
                 return response.content # Bytes
             return response
         if response.status_code == 401:

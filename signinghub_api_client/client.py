@@ -21,7 +21,14 @@ class SigningHubSession(BaseUrlSession):
 
     @access_token.setter
     def access_token_setter(self, token):
-        self.headers["Authorization"] = "Bearer {}".format(token)
+        if token is not None:
+            self.headers["Authorization"] = "Bearer {}".format(token)
+        else:
+            del self.headers["Authorization"]
+
+    @access_token.deleter
+    def access_token_deleter(self):
+        del self.headers["Authorization"]
 
     def request(self, method, url, *args, **kwargs):
         response = super().request(method, url, *args, **kwargs)
@@ -89,7 +96,7 @@ class SigningHubSession(BaseUrlSession):
         self.last_successful_auth_time = None
         self.access_token_expiry_time = None
         self.refresh_token = None
-        del self.headers["Authorization"] # TODO: Handle trough setter? Is setting to empty string the same thing?
+        self.access_token = None
         return data
 
     ############################################################################

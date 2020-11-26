@@ -100,6 +100,17 @@ class SigningHubSession(BaseUrlSession):
         return data
 
     ############################################################################
+    # PERSONAL SETTING
+    ############################################################################
+    def get_general_profile_information(self):
+        """
+        "Get General Profile Information"
+        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1104
+        """
+        return self.get("settings/profile")
+
+
+    ############################################################################
     # PACKAGE
     ############################################################################
     def add_package(self, data):

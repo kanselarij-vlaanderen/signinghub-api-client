@@ -168,6 +168,14 @@ class SigningHubSession(BaseUrlSession):
     ############################################################################
     # WORKFLOW
     ############################################################################
+    def get_workflow_details(self, package_id):
+        """
+        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1042
+        """
+        url = "packages/{package_id}/workflow".format(package_id=package_id)
+        self.headers["Content-Type"] = "application/json" # No content, but API doc specifies this
+        return self.get(url)
+
     def update_workflow_details(self, package_id, data):
         """
         https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1043

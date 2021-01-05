@@ -74,7 +74,7 @@ class SigningHubSession(BaseUrlSession):
             "token": token,
             "method": method
         }
-        response = super().post(json=data)
+        response = super().post("authenticate/sso", json=data)
         self.__process_authentication_response(response)
 
     def __process_authentication_response(self, response):

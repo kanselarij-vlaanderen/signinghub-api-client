@@ -63,7 +63,7 @@ class SigningHubSession(BaseUrlSession):
         else:
             data["username"] = username
             data["password"] = password
-        response = super().post("authenticate", data=data)
+        response = super().request("POST", "authenticate", data=data)
         self.__process_authentication_response(response)
 
     def authenticate_sso(self, token, method):
@@ -74,7 +74,7 @@ class SigningHubSession(BaseUrlSession):
             "token": token,
             "method": method
         }
-        response = super().post("authenticate/sso", json=data)
+        response = super().request("POST", "authenticate/sso", json=data)
         self.__process_authentication_response(response)
 
     def __process_authentication_response(self, response):

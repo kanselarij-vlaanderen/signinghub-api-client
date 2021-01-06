@@ -107,7 +107,7 @@ class SigningHubSession(BaseUrlSession):
         "Get General Profile Information"
         https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1104
         """
-        return self.get("settings/profile")
+        return self.get("v4/settings/profile")
 
 
     ############################################################################
@@ -117,7 +117,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1020
         """
-        return self.post("packages", json=data)
+        return self.post("v4/packages", json=data)
 
 
     ############################################################################
@@ -127,7 +127,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1022
         """
-        url = "packages/{package_id}/documents".format(package_id=package_id)
+        url = "v4/packages/{package_id}/documents".format(package_id=package_id)
         headers = {
             "x-file-name": filename,
             "x-convert-document": "true" if convert_document else "false",
@@ -141,7 +141,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1029
         """
-        url = "packages/{package_id}/documents/{document_id}".format(
+        url = "v4/packages/{package_id}/documents/{document_id}".format(
             package_id=package_id, document_id=document_id)
         self.headers["Accept"] = "application/octet-stream"
         return self.get(url)
@@ -150,7 +150,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1069
         """
-        url = "packages/{package_id}/documents/{document_id}/fields/signature".format(
+        url = "v4/packages/{package_id}/documents/{document_id}/fields/signature".format(
             package_id=package_id, document_id=document_id)
         return self.post(url, json=data)
 
@@ -158,7 +158,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1065
         """
-        url = "packages/{package_id}/documents/{document_id}/fields".format(
+        url = "v4/packages/{package_id}/documents/{document_id}/fields".format(
             package_id=package_id, document_id=document_id)
         if page_no is not None:
             url = url + "/{page_no:d}".format(page_no=page_no)
@@ -172,7 +172,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1042
         """
-        url = "packages/{package_id}/workflow".format(package_id=package_id)
+        url = "v4/packages/{package_id}/workflow".format(package_id=package_id)
         self.headers["Content-Type"] = "application/json" # No content, but API doc specifies this
         return self.get(url)
 
@@ -180,14 +180,14 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1043
         """
-        url = "packages/{package_id}/workflow".format(package_id=package_id)
+        url = "v4/packages/{package_id}/workflow".format(package_id=package_id)
         return self.put(url, json=data)
 
     def add_users_to_workflow(self, package_id, data):
         """
         https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1047
         """
-        url = "packages/{package_id}/workflow/users".format(package_id=package_id)
+        url = "v4/packages/{package_id}/workflow/users".format(package_id=package_id)
         return self.post(url, json=data)
 
     def share_document_package(self, package_id):
@@ -195,7 +195,7 @@ class SigningHubSession(BaseUrlSession):
         "Send out the workflow"
         https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1025
         """
-        url = "packages/{package_id}/workflow".format(package_id=package_id)
+        url = "v4/packages/{package_id}/workflow".format(package_id=package_id)
         self.headers["Content-Type"] = "application/json" # No content, but API doc specifies this
         return self.post(url)
 
@@ -205,7 +205,7 @@ class SigningHubSession(BaseUrlSession):
         "Step 12 - Generate Integration URL for Encrypted Data (Coding)" of the following page has some useful info.
         https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1004
         """
-        url = "links/integration"
+        url = "v4/links/integration"
         data["package_id"] = package_id
         return self.post(url, json=data) # TODO: if API returns response with wrong content-type, this will fail.
 

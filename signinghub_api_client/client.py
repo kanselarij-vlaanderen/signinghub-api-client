@@ -20,14 +20,14 @@ class SigningHubSession(BaseUrlSession):
         return self.headers["Authorization"].replace("Bearer ", "")
 
     @access_token.setter
-    def access_token_setter(self, token):
+    def access_token(self, token):
         if token is not None:
             self.headers["Authorization"] = "Bearer {}".format(token)
         else:
             del self.headers["Authorization"]
 
     @access_token.deleter
-    def access_token_deleter(self):
+    def access_token(self):
         del self.headers["Authorization"]
 
     def request(self, method, url, *args, **kwargs):

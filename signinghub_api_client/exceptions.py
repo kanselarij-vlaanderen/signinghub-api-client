@@ -8,7 +8,7 @@ class SigningHubException(Exception):
 
     def __str__(self):
         return """SigningHubException:
-    error description: {error_description}""".format(error_description=self.error_description)
+error description: {error_description}""".format(error_description=self.error_description)
 
 
 class AuthenticationException(SigningHubException):
@@ -21,9 +21,9 @@ class AuthenticationException(SigningHubException):
 
     def __str__(self):
         return """SigningHub AuthenticationException:
-    error: "{error_id}"
-    error description: {error_description}
-    x- headers: {x_headers}""".format(
+error: "{error_id}"
+error description: {error_description}
+x- headers: {x_headers}""".format(
         error_id=self.error_id,
         error_description=self.error_description,
         x_headers=self.x_headers)
@@ -32,4 +32,4 @@ class AuthenticationException(SigningHubException):
 class UnauthenticatedException(SigningHubException):
     def __str__(self):
         return """SigningHub UnauthenticatedException:
-    error description: {error_description}""".format(error_description=self.error_description)
+error description: {error_description}""".format(error_description=self.error_description)

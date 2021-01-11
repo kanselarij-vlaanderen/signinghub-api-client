@@ -33,10 +33,11 @@ class SigningHubSession(BaseUrlSession):
     def request(self, method, url, *args, **kwargs):
         response = super().request(method, url, *args, **kwargs)
         if response.status_code in (200, 201):
-            if "application/json" in response.headers["Content-Type"]: # TODO: Proper mime-type parsing
-                return response.json()
-            if "application/octet-stream" in response.headers["Content-Type"]:
-                return response.content # Bytes
+            if "Content-Type" in response.headers: 
+                if "application/json" in response.headers["Content-Type"]: # TODO: Proper mime-type parsing
+                    return response.json()
+                if "application/octet-stream" in response.headers["Content-Type"]:
+                    return response.content # Bytes
             return response
         if response.status_code == 401:
             raise UnauthenticatedException(response)

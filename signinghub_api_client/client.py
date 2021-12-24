@@ -49,7 +49,7 @@ class SigningHubSession(BaseUrlSession):
     def authenticate(self, client_id, client_secret, grant_type="password", username=None, password=None, scope=None):
         """
         username and password are optional when a previous authentication provided a "refresh_token"
-        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1010
+        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1010.htm
         """
         data = {
             "client_id": client_id,
@@ -69,7 +69,7 @@ class SigningHubSession(BaseUrlSession):
 
     def authenticate_sso(self, token, method):
         """
-        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1192
+        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1192.htm
         """
         data = {
             "token": token,
@@ -91,7 +91,7 @@ class SigningHubSession(BaseUrlSession):
 
     def logout(self):
         """
-        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1161
+        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1161.htm
         """
         data = self.post("logout")
         self.last_successful_auth_time = None
@@ -106,7 +106,7 @@ class SigningHubSession(BaseUrlSession):
     def get_general_profile_information(self):
         """
         "Get General Profile Information"
-        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1104
+        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1104.htm
         """
         return self.get("v4/settings/profile")
 
@@ -116,7 +116,7 @@ class SigningHubSession(BaseUrlSession):
     ############################################################################
     def add_package(self, data):
         """
-        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1020
+        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1020.htm
         """
         return self.post("v4/packages", json=data)
 
@@ -126,7 +126,7 @@ class SigningHubSession(BaseUrlSession):
     ############################################################################
     def upload_document(self, package_id, data, filename, source, convert_document=True):
         """
-        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1022
+        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1022.htm
         """
         url = "v4/packages/{package_id}/documents".format(package_id=package_id)
         headers = {
@@ -140,7 +140,7 @@ class SigningHubSession(BaseUrlSession):
 
     def download_document(self, package_id, document_id):
         """
-        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1029
+        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1029.htm
         """
         url = "v4/packages/{package_id}/documents/{document_id}".format(
             package_id=package_id, document_id=document_id)
@@ -149,7 +149,7 @@ class SigningHubSession(BaseUrlSession):
 
     def add_signature_field(self, package_id, document_id, data):
         """
-        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1069
+        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1069.htm
         """
         url = "v4/packages/{package_id}/documents/{document_id}/fields/signature".format(
             package_id=package_id, document_id=document_id)
@@ -157,7 +157,7 @@ class SigningHubSession(BaseUrlSession):
 
     def get_document_fields(self, package_id, document_id, page_no=None):
         """
-        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1065
+        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1065.htm
         """
         url = "v4/packages/{package_id}/documents/{document_id}/fields".format(
             package_id=package_id, document_id=document_id)
@@ -171,7 +171,7 @@ class SigningHubSession(BaseUrlSession):
     ############################################################################
     def get_workflow_details(self, package_id):
         """
-        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1042
+        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1042.htm
         """
         url = "v4/packages/{package_id}/workflow".format(package_id=package_id)
         self.headers["Content-Type"] = "application/json" # No content, but API doc specifies this
@@ -179,14 +179,14 @@ class SigningHubSession(BaseUrlSession):
 
     def update_workflow_details(self, package_id, data):
         """
-        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1043
+        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1043.htm
         """
         url = "v4/packages/{package_id}/workflow".format(package_id=package_id)
         return self.put(url, json=data)
 
     def add_users_to_workflow(self, package_id, data):
         """
-        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1047
+        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1047.htm
         """
         url = "v4/packages/{package_id}/workflow/users".format(package_id=package_id)
         return self.post(url, json=data)
@@ -194,7 +194,7 @@ class SigningHubSession(BaseUrlSession):
     def share_document_package(self, package_id):
         """
         "Send out the workflow"
-        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1025
+        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1025.htm
         """
         url = "v4/packages/{package_id}/workflow".format(package_id=package_id)
         self.headers["Content-Type"] = "application/json" # No content, but API doc specifies this
@@ -204,9 +204,8 @@ class SigningHubSession(BaseUrlSession):
         """
         No real documentation page is available for this call.
         "Step 12 - Generate Integration URL for Encrypted Data (Coding)" of the following page has some useful info.
-        https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=1004
+        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1004.htm
         """
         url = "v4/links/integration"
         data["package_id"] = package_id
         return self.post(url, json=data) # TODO: if API returns response with wrong content-type, this will fail.
-

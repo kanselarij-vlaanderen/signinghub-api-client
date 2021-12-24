@@ -1,6 +1,6 @@
 # SigningHub API client
 
-A minimal Python client for [SigningHub's API](https://manuals.ascertia.com/SigningHub-apiguide/default.aspx#pageid=welcome).
+A minimal Python client for [SigningHub's API](https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/).
 
 ## Installation
 

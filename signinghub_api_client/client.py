@@ -93,7 +93,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1161.htm
         """
-        data = self.post("logout")
+        data = self.post("v4/logout")
         self.last_successful_auth_time = None
         self.access_token_expiry_time = None
         self.refresh_token = None

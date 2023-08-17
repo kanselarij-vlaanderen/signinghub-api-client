@@ -173,7 +173,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1042.htm
         """
-        url = "v4/packages/{package_id}/workflow".format(package_id=package_id)
+        url = "v3/packages/{package_id}/workflow".format(package_id=package_id) # TODO: temporary workaround v4 bug
         self.headers["Content-Type"] = "application/json" # No content, but API doc specifies this
         return self.get(url)
 

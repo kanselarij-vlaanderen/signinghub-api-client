@@ -181,7 +181,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1043.htm
         """
-        url = "v4/packages/{package_id}/workflow".format(package_id=package_id)
+        url = "v3/packages/{package_id}/workflow".format(package_id=package_id) # TODO: temporary workaround v4 bug
         return self.put(url, json=data)
 
     def add_users_to_workflow(self, package_id, data):

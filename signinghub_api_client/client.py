@@ -142,7 +142,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1029.htm
         """
-        url = "v4/packages/{package_id}/documents/{document_id}".format(
+        url = "v3/packages/{package_id}/documents/{document_id}".format(
             package_id=package_id, document_id=document_id)
         self.headers["Accept"] = "application/octet-stream"
         return self.get(url)

@@ -1,10 +1,15 @@
+import requests
+
 class SigningHubException(Exception):
     def __init__(self, response):
         super().__init__(response)
         self.response = response
-        data = response.json()
-        if "Message" in data:
-            self.error_description = data["Message"]
+        try:
+            data = response.json()
+            if "Message" in data:
+                self.error_description = data["Message"]
+        except requests.exceptions.JSONDecodeError:
+            self.error_description = response.text
 
     def __str__(self):
         return """SigningHubException:

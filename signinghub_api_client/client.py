@@ -144,7 +144,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1029.htm
         """
-        url = "v4/packages/{package_id}/documents/{document_id}".format(
+        url = "v3/packages/{package_id}/documents/{document_id}".format(
             package_id=package_id, document_id=document_id)
         self.headers["Accept"] = "application/octet-stream"
         return self.get(url)
@@ -175,7 +175,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1042.htm
         """
-        url = "v4/packages/{package_id}/workflow".format(package_id=package_id)
+        url = "v3/packages/{package_id}/workflow".format(package_id=package_id)
         self.headers["Content-Type"] = "application/json" # No content, but API doc specifies this
         return self.get(url)
 
@@ -183,7 +183,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1043.htm
         """
-        url = "v4/packages/{package_id}/workflow".format(package_id=package_id)
+        url = "v3/packages/{package_id}/workflow".format(package_id=package_id)
         return self.put(url, json=data)
 
     def add_users_to_workflow(self, package_id, data):

@@ -1,4 +1,3 @@
-import logging
 from datetime import datetime, timedelta, timezone
 from requests_toolbelt.sessions import BaseUrlSession
 from .exceptions import SigningHubException, AuthenticationException, UnauthenticatedException
@@ -32,7 +31,7 @@ class SigningHubSession(BaseUrlSession):
         del self.headers["Authorization"]
 
     def request(self, method, url, *args, **kwargs):
-        logging.debug(f"Performing {method} call to {self.base_url}/{url}")
+        print(f"Performing {method} call to {self.base_url}/{url}", flush=True)
         response = super().request(method, url, *args, **kwargs)
         if response.status_code in (200, 201):
             if "Content-Type" in response.headers:

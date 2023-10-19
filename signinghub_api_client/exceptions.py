@@ -1,11 +1,9 @@
-from requests_toolbelt.utils import dump
 import requests
 
 class SigningHubException(Exception):
     def __init__(self, response):
         super().__init__(response)
         self.response = response
-        self.raw_response = dump.dump_all(response)
         try:
             data = response.json()
             if "Message" in data:
@@ -17,8 +15,7 @@ class SigningHubException(Exception):
         return """SigningHubException:
 error description: {error_description}
 raw response: {raw_response}""".format(
-    error_description=self.error_description,
-    raw_response=self.raw_response)
+    error_description=self.error_description)
 
 
 class AuthenticationException(SigningHubException):
@@ -37,8 +34,7 @@ x- headers: {x_headers}
 raw response: {raw_response}""".format(
         error_id=self.error_id,
         error_description=self.error_description,
-        x_headers=self.x_headers,
-        raw_response=self.raw_response)
+        x_headers=self.x_headers)
 
 
 class UnauthenticatedException(SigningHubException):
@@ -46,5 +42,4 @@ class UnauthenticatedException(SigningHubException):
         return """SigningHub UnauthenticatedException:
 error description: {error_description}
 raw response: {raw_response}""".format(
-    error_description=self.error_description,
-    raw_response=self.raw_response)
+    error_description=self.error_description)

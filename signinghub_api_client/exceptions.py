@@ -9,7 +9,9 @@ class SigningHubException(Exception):
             if "Message" in data:
                 self.error_description = data["Message"]
         except requests.exceptions.JSONDecodeError:
-            self.error_description = response.text
+            # Truncate the response text to 100K characters
+            # to prevent huge responses from overloading the service
+            self.error_description = response.text[:100000]
 
     def __str__(self):
         return """SigningHubException:

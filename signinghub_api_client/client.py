@@ -155,6 +155,15 @@ class SigningHubSession(BaseUrlSession):
             package_id=package_id, document_id=document_id)
         return self.post(url, json=data)
 
+    def auto_place_signature_field(self, package_id, document_id, data):
+        """
+        https://manuals.ascertia.com/SigningHub/8.4/Api/#tag/Document-Preparation/operation/V4_Fields_AutoPlace
+        """
+        url = "v4/packages/{package_id}/documents/{document_id}/fields/autoplace".format(
+            package_id=package_id, document_id=document_id)
+        return self.post(url, json=data)
+
+
     def get_document_fields(self, package_id, document_id, page_no=None):
         """
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1065.htm

@@ -84,7 +84,7 @@ class SigningHubSession(BaseUrlSession):
         else:
             data["username"] = username
             data["password"] = password
-        req = requests.Request("POST", "authenticate", data=data)
+        req = requests.Request("POST", f"{self.base_url}authenticate", data=data)
         prepared = req.prepare()
         pretty_print_POST(prepared)
         response = super().request("POST", "authenticate", data=data)

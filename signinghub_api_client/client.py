@@ -1,6 +1,25 @@
 from datetime import datetime, timedelta, timezone
+import requests
 from requests_toolbelt.sessions import BaseUrlSession
 from .exceptions import SigningHubException, AuthenticationException, UnauthenticatedException
+
+
+def pretty_print_POST(req):
+    """
+    At this point it is completely built and ready
+    to be fired; it is "prepared".
+
+    However pay attention at the formatting used in
+    this function because it is programmed to be pretty
+    printed and may differ from the actual request.
+    """
+    print('{}\n{}\r\n{}\r\n\r\n{}'.format(
+        '-----------START-----------',
+        req.method + ' ' + req.url,
+        '\r\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
+        req.body,
+    ))
+
 
 class SigningHubSession(BaseUrlSession):
     def __init__(self, base_url):
@@ -65,6 +84,9 @@ class SigningHubSession(BaseUrlSession):
         else:
             data["username"] = username
             data["password"] = password
+        req = requests.Request("POST", "authenticate", data=data)
+        prepared = req.prepare()
+        pretty_print_POST(prepared)
         response = super().request("POST", "authenticate", data=data)
         self.__process_authentication_response(response)
 

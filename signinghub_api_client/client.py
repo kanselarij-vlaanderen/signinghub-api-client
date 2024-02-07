@@ -77,8 +77,8 @@ class SigningHubSession(BaseUrlSession):
             "grant_type": grant_type
         }
 
-        # response = super().request("POST", "v4/authenticate", data=data)
-        request = requests.Request("POST", "v4/authenticate", data=data)
+        # response = super().request("POST", "authenticate", data=data)
+        request = requests.Request("POST", "authenticate", data=data)
         prepared_request = self.prepare_request(request)
         pretty_print_POST(prepared_request)
         response = self.send(prepared_request)
@@ -88,7 +88,7 @@ class SigningHubSession(BaseUrlSession):
             data = {
                 "user_email": scope
             }
-            # response = super().request("POST", "v4/authenticate/scope", data=data)
+            # response = super().request("POST", "authenticate/scope", data=data)
             request = requests.Request("POST", "v4/authenticate/scope", data=data)
             prepared_request = self.prepare_request(request)
             pretty_print_POST(prepared_request)
@@ -103,7 +103,7 @@ class SigningHubSession(BaseUrlSession):
             "token": token,
             "method": method
         }
-        response = super().request("POST", "v4/authenticate/sso", json=data)
+        response = super().request("POST", "authenticate/sso", json=data)
         self.__process_authentication_response(response)
 
     def __process_authentication_response(self, response):

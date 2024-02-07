@@ -66,9 +66,8 @@ class SigningHubSession(BaseUrlSession):
     ############################################################################
     # AUTHENTICATION
     ############################################################################
-    def authenticate(self, client_id, client_secret, grant_type="client_credentials", username=None, password=None, scope=None):
+    def authenticate(self, client_id, client_secret, grant_type="client_credentials", scope=None):
         """
-        username and password are optional when a previous authentication provided a "refresh_token"
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1010.htm
         """
         data = {

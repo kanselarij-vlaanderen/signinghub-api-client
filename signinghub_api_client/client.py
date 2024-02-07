@@ -32,7 +32,7 @@ class SigningHubSession(BaseUrlSession):
         del self.headers["Authorization"]
 
     def request(self, method, url, *args, **kwargs):
-        print(f"Performing {method} call to {self.base_url}/{url}", flush=True)
+        print(f"Performing {method} call to {self.base_url}{url}", flush=True)
         response = super().request(method, url, *args, **kwargs)
         if response.status_code in (200, 201):
             if "Content-Type" in response.headers:
@@ -58,14 +58,14 @@ class SigningHubSession(BaseUrlSession):
             "grant_type": grant_type
         }
 
-        response = super().request("POST", "authenticate", data=data)
+        response = self.post("authenticate", data=data)
         self.__process_authentication_response(response)
 
         if scope is not None:
             data = {
                 "user_email": scope
             }
-            response = super().request("POST", "authenticate/scope", json=data)
+            response = self.post("authenticate/scope", json=data)
             self.__process_authentication_response(response)
 
     def authenticate_sso(self, token, method):
@@ -76,7 +76,7 @@ class SigningHubSession(BaseUrlSession):
             "token": token,
             "method": method
         }
-        response = super().request("POST", "authenticate/sso", json=data)
+        response = self.post("authenticate/sso", json=data)
         self.__process_authentication_response(response)
 
     def __process_authentication_response(self, response):

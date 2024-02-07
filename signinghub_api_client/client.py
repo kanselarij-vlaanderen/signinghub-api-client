@@ -58,14 +58,14 @@ class SigningHubSession(BaseUrlSession):
             "grant_type": grant_type
         }
 
-        response = self.post("authenticate", data=data)
+        response = super().request("POST", "authenticate", data=data)
         self.__process_authentication_response(response)
 
         if scope is not None:
             data = {
                 "user_email": scope
             }
-            response = self.post("authenticate/scope", json=data)
+            response = super().request("POST", "authenticate/scope", json=data)
             self.__process_authentication_response(response)
 
     def authenticate_sso(self, token, method):
@@ -76,7 +76,7 @@ class SigningHubSession(BaseUrlSession):
             "token": token,
             "method": method
         }
-        response = self.post("authenticate/sso", json=data)
+        response = super().request("POST", "authenticate/sso", json=data)
         self.__process_authentication_response(response)
 
     def __process_authentication_response(self, response):

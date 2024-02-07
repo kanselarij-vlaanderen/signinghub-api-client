@@ -25,7 +25,7 @@ class SigningHubException(Exception):
     def __str__(self):
         class_name = type(self).__name__
         return f"""{class_name}
-{f"{k}: {v}" for k, v in self._print_fields.items()}
+{[f"{k}: {v}" for k, v in self._print_fields.items()].join("\n")}
 response text {"(truncated)" if self._response_truncated else ""}: {self._response_text}"""
 
 

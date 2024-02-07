@@ -66,7 +66,7 @@ class SigningHubSession(BaseUrlSession):
     ############################################################################
     # AUTHENTICATION
     ############################################################################
-    def authenticate(self, client_id, client_secret, grant_type="password", username=None, password=None, scope=None):
+    def authenticate(self, client_id, client_secret, grant_type="client_credentials", username=None, password=None, scope=None):
         """
         username and password are optional when a previous authentication provided a "refresh_token"
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1010.htm
@@ -76,18 +76,19 @@ class SigningHubSession(BaseUrlSession):
             "client_secret": client_secret,
             "grant_type": grant_type
         }
-        if scope is not None:
-            data["scope"] = scope
 
-        if (username is None) and (password is None) and (self.refresh_token is not None):
-            data["refresh_token"] = self.refresh_token
-        else:
-            data["username"] = username
-            data["password"] = password
         req = requests.Request("POST", f"{self.base_url}authenticate", data=data)
         prepared = req.prepare()
         pretty_print_POST(prepared)
-        response = super().request("POST", "authenticate", data=data)
+
+        response = super().request("POST", "v4/authenticate", data=data)
+
+        if scope is not None:
+            data = {
+                "user_email": scope
+            }
+            response = super().request("POST", "v4/authenticate", data=data)
+
         self.__process_authentication_response(response)
 
     def authenticate_sso(self, token, method):
@@ -98,7 +99,7 @@ class SigningHubSession(BaseUrlSession):
             "token": token,
             "method": method
         }
-        response = super().request("POST", "authenticate/sso", json=data)
+        response = super().request("POST", "v4/authenticate/sso", json=data)
         self.__process_authentication_response(response)
 
     def __process_authentication_response(self, response):
@@ -165,7 +166,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1029.htm
         """
-        url = "v3/packages/{package_id}/documents/{document_id}".format(
+        url = "v4/packages/{package_id}/documents/{document_id}".format(
             package_id=package_id, document_id=document_id)
         self.headers["Accept"] = "application/octet-stream"
         return self.get(url)
@@ -205,7 +206,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1042.htm
         """
-        url = "v3/packages/{package_id}/workflow".format(package_id=package_id)
+        url = "v4/packages/{package_id}/workflow".format(package_id=package_id)
         self.headers["Content-Type"] = "application/json" # No content, but API doc specifies this
         return self.get(url)
 
@@ -213,7 +214,7 @@ class SigningHubSession(BaseUrlSession):
         """
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1043.htm
         """
-        url = "v3/packages/{package_id}/workflow".format(package_id=package_id)
+        url = "v4/packages/{package_id}/workflow".format(package_id=package_id)
         return self.put(url, json=data)
 
     def add_users_to_workflow(self, package_id, data):

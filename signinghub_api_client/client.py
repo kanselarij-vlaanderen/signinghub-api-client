@@ -77,17 +77,21 @@ class SigningHubSession(BaseUrlSession):
             "grant_type": grant_type
         }
 
-        req = requests.Request("POST", f"{self.base_url}authenticate", data=data)
-        prepared = req.prepare()
-        pretty_print_POST(prepared)
-
-        response = super().request("POST", "v4/authenticate", data=data)
+        # response = super().request("POST", "v4/authenticate", data=data)
+        request = requests.Request("POST", "v4/authenticate", data=data)
+        prepared_request = self.prepare_request(request)
+        pretty_print_POST(prepared_request)
+        response = self.send(prepared_request)
 
         if scope is not None:
             data = {
                 "user_email": scope
             }
-            response = super().request("POST", "v4/authenticate", data=data)
+            # response = super().request("POST", "v4/authenticate", data=data)
+            request = requests.Request("POST", "v4/authenticate", data=data)
+            prepared_request = self.prepare_request(request)
+            pretty_print_POST(prepared_request)
+            response = self.send(prepared_request)
 
         self.__process_authentication_response(response)
 

@@ -87,8 +87,8 @@ class SigningHubSession(BaseUrlSession):
             data = {
                 "user_email": scope
             }
-            # response = super().request("POST", "v4/authenticate", data=data)
-            request = requests.Request("POST", "v4/authenticate", data=data)
+            # response = super().request("POST", "v4/authenticate/scope", data=data)
+            request = requests.Request("POST", "v4/authenticate/scope", data=data)
             prepared_request = self.prepare_request(request)
             pretty_print_POST(prepared_request)
             response = self.send(prepared_request)

@@ -114,7 +114,7 @@ class SigningHubSession(BaseUrlSession):
             data = response.json()
             self.access_token = data["access_token"]
             self.access_token_expiry_time = timedelta(seconds=data["expires_in"])
-            self.refresh_token = data["refresh_token"]
+            self.refresh_token = data["refresh_token"] if "refresh_token" in data else None
         else:
             raise AuthenticationException(response)
 

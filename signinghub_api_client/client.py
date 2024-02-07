@@ -65,7 +65,7 @@ class SigningHubSession(BaseUrlSession):
             data = {
                 "user_email": scope
             }
-            response = super().request("POST", "authenticate/scope", json=data)
+            response = super().request("POST", "v4/authenticate/scope", json=data)
             self.__process_authentication_response(response)
 
     def authenticate_sso(self, token, method):

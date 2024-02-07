@@ -82,6 +82,7 @@ class SigningHubSession(BaseUrlSession):
         prepared_request = self.prepare_request(request)
         pretty_print_POST(prepared_request)
         response = self.send(prepared_request)
+        print(response.text, flush=True)
         self.__process_authentication_response(response)
 
         if scope is not None:
@@ -93,6 +94,7 @@ class SigningHubSession(BaseUrlSession):
             prepared_request = self.prepare_request(request)
             pretty_print_POST(prepared_request)
             response = self.send(prepared_request)
+            print(response.text, flush=True)
             self.__process_authentication_response(response)
 
     def authenticate_sso(self, token, method):

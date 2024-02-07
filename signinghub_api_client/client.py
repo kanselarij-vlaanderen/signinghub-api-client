@@ -1,24 +1,6 @@
 from datetime import datetime, timedelta, timezone
-import requests
 from requests_toolbelt.sessions import BaseUrlSession
 from .exceptions import SigningHubException, AuthenticationException, UnauthenticatedException
-
-
-def pretty_print_POST(req):
-    """
-    At this point it is completely built and ready
-    to be fired; it is "prepared".
-
-    However pay attention at the formatting used in
-    this function because it is programmed to be pretty
-    printed and may differ from the actual request.
-    """
-    print('{}\n{}\r\n{}\r\n\r\n{}'.format(
-        '-----------START-----------',
-        req.method + ' ' + req.url,
-        '\r\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
-        req.body,
-    ))
 
 
 class SigningHubSession(BaseUrlSession):
@@ -76,24 +58,14 @@ class SigningHubSession(BaseUrlSession):
             "grant_type": grant_type
         }
 
-        # response = super().request("POST", "authenticate", data=data)
-        request = requests.Request("POST", "authenticate", data=data)
-        prepared_request = self.prepare_request(request)
-        pretty_print_POST(prepared_request)
-        response = self.send(prepared_request)
-        print(response.text, flush=True)
+        response = super().request("POST", "authenticate", data=data)
         self.__process_authentication_response(response)
 
         if scope is not None:
             data = {
                 "user_email": scope
             }
-            # response = super().request("POST", "authenticate/scope", json=data)
-            request = requests.Request("POST", "v4/authenticate/scope", json=data)
-            prepared_request = self.prepare_request(request)
-            pretty_print_POST(prepared_request)
-            response = self.send(prepared_request)
-            print(response.text, flush=True)
+            response = super().request("POST", "authenticate/scope", json=data)
             self.__process_authentication_response(response)
 
     def authenticate_sso(self, token, method):

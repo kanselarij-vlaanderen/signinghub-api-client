@@ -2,6 +2,7 @@ from datetime import datetime, timedelta, timezone
 from requests_toolbelt.sessions import BaseUrlSession
 from .exceptions import SigningHubException, AuthenticationException, UnauthenticatedException
 
+
 class SigningHubSession(BaseUrlSession):
     def __init__(self, base_url):
         self.base_url = base_url
@@ -31,6 +32,7 @@ class SigningHubSession(BaseUrlSession):
         del self.headers["Authorization"]
 
     def request(self, method, url, *args, **kwargs):
+        print(f"Performing {method} call to {self.base_url}{url}", flush=True)
         response = super().request(method, url, *args, **kwargs)
         if response.status_code in (200, 201):
             if "Content-Type" in response.headers:
@@ -46,9 +48,8 @@ class SigningHubSession(BaseUrlSession):
     ############################################################################
     # AUTHENTICATION
     ############################################################################
-    def authenticate(self, client_id, client_secret, grant_type="password", username=None, password=None, scope=None):
+    def authenticate(self, client_id, client_secret, grant_type="client_credentials", scope=None):
         """
-        username and password are optional when a previous authentication provided a "refresh_token"
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1010.htm
         """
         data = {
@@ -56,16 +57,16 @@ class SigningHubSession(BaseUrlSession):
             "client_secret": client_secret,
             "grant_type": grant_type
         }
-        if scope is not None:
-            data["scope"] = scope
 
-        if (username is None) and (password is None) and (self.refresh_token is not None):
-            data["refresh_token"] = self.refresh_token
-        else:
-            data["username"] = username
-            data["password"] = password
         response = super().request("POST", "authenticate", data=data)
         self.__process_authentication_response(response)
+
+        if scope is not None:
+            data = {
+                "user_email": scope
+            }
+            response = super().request("POST", "v4/authenticate/scope", json=data)
+            self.__process_authentication_response(response)
 
     def authenticate_sso(self, token, method):
         """
@@ -85,7 +86,7 @@ class SigningHubSession(BaseUrlSession):
             data = response.json()
             self.access_token = data["access_token"]
             self.access_token_expiry_time = timedelta(seconds=data["expires_in"])
-            self.refresh_token = data["refresh_token"]
+            self.refresh_token = data["refresh_token"] if "refresh_token" in data else None
         else:
             raise AuthenticationException(response)
 
@@ -154,6 +155,15 @@ class SigningHubSession(BaseUrlSession):
         url = "v4/packages/{package_id}/documents/{document_id}/fields/signature".format(
             package_id=package_id, document_id=document_id)
         return self.post(url, json=data)
+
+    def auto_place_signature_field(self, package_id, document_id, data):
+        """
+        https://manuals.ascertia.com/SigningHub/8.4/Api/#tag/Document-Preparation/operation/V4_Fields_AutoPlace
+        """
+        url = "v4/packages/{package_id}/documents/{document_id}/fields/autoplace".format(
+            package_id=package_id, document_id=document_id)
+        return self.post(url, json=data)
+
 
     def get_document_fields(self, package_id, document_id, page_no=None):
         """

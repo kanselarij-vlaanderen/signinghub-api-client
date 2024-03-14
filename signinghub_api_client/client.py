@@ -139,6 +139,16 @@ class SigningHubSession(BaseUrlSession):
         # TODO: Is mime-type automatically "application/octet-stream"?
         return self.post(url, data=data, headers=headers)
 
+    def upload_attachment(self, package_id, document_id, data):
+        """
+        https://manuals.ascertia.com/SigningHub/8.6/Api/#tag/Document-Package/operation/V4_Attachment_UploadAttachment
+        """
+        url = "v4/packages/{package_id}/documents/{document_id}/attachments".format(
+            package_id=package_id,
+            document_id=document_id,
+        )
+        return self.post(url, files={'attachment': data})
+
     def download_document(self, package_id, document_id):
         """
         https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1029.htm

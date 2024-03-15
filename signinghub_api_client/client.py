@@ -33,7 +33,29 @@ class SigningHubSession(BaseUrlSession):
 
     def request(self, method, url, *args, **kwargs):
         print(f"Performing {method} call to {self.base_url}{url}", flush=True)
+
+        import requests
+
+        def pretty_print_POST(req):
+            """
+            At this point it is completely built and ready
+            to be fired; it is "prepared".
+
+            However pay attention at the formatting used in
+            this function because it is programmed to be pretty
+            printed and may differ from the actual request.
+            """
+            print('{}\n{}\r\n{}\r\n\r\n{}'.format(
+                '-----------START-----------',
+                req.method + ' ' + req.url,
+                '\r\n'.join('{}: {}'.format(k, v) for k, v in req.headers.items()),
+                req.body,
+            ), flush=True)
+
+        req = requests.Request(method, url, *args, **kwargs)
+        pretty_print_POST(req)
         response = super().request(method, url, *args, **kwargs)
+
         if response.status_code in (200, 201):
             if "Content-Type" in response.headers:
                 if "application/json" in response.headers["Content-Type"]: # TODO: Proper mime-type parsing

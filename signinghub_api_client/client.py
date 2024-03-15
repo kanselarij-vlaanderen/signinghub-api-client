@@ -35,6 +35,9 @@ class SigningHubSession(BaseUrlSession):
         print(f"Performing {method} call to {self.base_url}{url}", flush=True)
 
         import requests
+        import pprint
+
+        pprint.pprint(kwargs)
 
         def pretty_print_POST(req):
             """
@@ -53,7 +56,7 @@ class SigningHubSession(BaseUrlSession):
             ), flush=True)
 
         req = requests.Request(method, url, *args, **kwargs)
-        pretty_print_POST(req)
+        pretty_print_POST(req.prepare())
         response = super().request(method, url, *args, **kwargs)
 
         if response.status_code in (200, 201):

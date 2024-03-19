@@ -81,11 +81,8 @@ class SigningHubSession(BaseUrlSession):
         if scope is not None:
             data["scope"] = scope
 
-        if (username is None) and (password is None) and (self.refresh_token is not None):
-            data["refresh_token"] = self.refresh_token
-        else:
-            data["username"] = username
-            data["password"] = password
+        data["username"] = username
+        data["password"] = password
         response = super().request("POST", "authenticate", data=data)
 
         self.__process_authentication_response(response)

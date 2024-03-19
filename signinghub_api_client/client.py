@@ -49,14 +49,14 @@ class SigningHubSession(BaseUrlSession):
     ############################################################################
     # AUTHENTICATION
     ############################################################################
-    def authenticate(self, client_id, client_secret, grant_type="client_credentials", scope=None):
+    def authenticate_client_credentials(self, client_id, client_secret, scope=None):
         """
-        https://manuals.keysign.eu/SigningHub-APIGuide-v4-rev1/1010.htm
+        https://manuals.ascertia.com/SigningHub/8.4/Api/#tag/Authentication/operation/Authentication_ClientCredential
         """
         data = {
             "client_id": client_id,
             "client_secret": client_secret,
-            "grant_type": grant_type
+            "grant_type": "client_credentials"
         }
 
         response = super().request("POST", "authenticate", data=data)
@@ -68,6 +68,27 @@ class SigningHubSession(BaseUrlSession):
             }
             response = super().request("POST", "v4/authenticate/scope", json=data)
             self.__process_authentication_response(response)
+
+    def authenticate_password(self, client_id, client_secret, username, password, scope=None):
+        """
+        https://manuals.ascertia.com/SigningHub/8.4/Api/#tag/Authentication/operation/Authentication_Authenticate
+        """
+        data = {
+            "client_id": client_id,
+            "client_secret": client_secret,
+            "grant_type": "password"
+        }
+        if scope is not None:
+            data["scope"] = scope
+
+        if (username is None) and (password is None) and (self.refresh_token is not None):
+            data["refresh_token"] = self.refresh_token
+        else:
+            data["username"] = username
+            data["password"] = password
+        response = super().request("POST", "authenticate", data=data)
+
+        self.__process_authentication_response(response)
 
     def authenticate_sso(self, token, method):
         """

@@ -140,7 +140,7 @@ class SigningHubSession(BaseUrlSession):
         # TODO: Is mime-type automatically "application/octet-stream"?
         return self.post(url, data=data, headers=headers)
 
-    def upload_attachment(self, package_id, document_id, data):
+    def upload_attachment(self, package_id, document_id, data, filename, source, convert_document=True):
         """
         https://manuals.ascertia.com/SigningHub/8.6/Api/#tag/Document-Package/operation/V4_Attachment_UploadAttachment
         """
@@ -148,6 +148,11 @@ class SigningHubSession(BaseUrlSession):
             package_id=package_id,
             document_id=document_id,
         )
+        headers = {
+            "x-file-name": filename,
+            "x-convert-document": "true" if convert_document else "false",
+            "x-source": source,
+        }
 
         import requests
 
@@ -167,9 +172,9 @@ class SigningHubSession(BaseUrlSession):
                 req.body,
             ), flush=True)
 
-        req = requests.Request("POST", f"{self.base_url}{url}", self.headers, files={'attachment': data})
+        req = requests.Request("POST", f"{self.base_url}{url}", headers=headers, data=data)
         pretty_print_POST(self.prepare_request(req))
-        return self.post(url, files={'attachment': data})
+        return self.post(url, data=data, headers=headers)
 
     def download_document(self, package_id, document_id):
         """
